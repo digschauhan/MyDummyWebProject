@@ -3,8 +3,12 @@
 <project name="MyDummyWebProject" default="all" >
 	<property environment="env"/>
 	<target name="all" >
-		<echo message = "XXXX : all target has been called ...." />
+		<echo message = "XXXX : target all has been called ....1" />
 	</target>
+	
+	
+	
+	
 	<target name="webservice.WSDL2JavaTask">
 
 		<echo message = "XXXX : Service Generation Started ...." />
