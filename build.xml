@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="MyDummyWebProject" default="all" >
+	<property environment="env"/>
+	<target name="all" >
+		<echo message = "XXXX : all target has been called ...." />
+	</target>
+	<target name="webservice.WSDL2JavaTask">
+
+		<echo message = "XXXX : Service Generation Started ...." />
+		
+		<delete failonerror="false" >
+			<fileset dir="${autotype.output.location}" includes="**/*.java"/>
+		</delete>
+	
+		<echo message = "XXXX : Creating directory - ${autotype.output.location}/WEB-INF/classes ...." />
+		<mkdir dir="${autotype.output.location}/WEB-INF/classes" />
+		<echo message = "XXXX : Directory Created - ${autotype.output.location}/WEB-INF/classes ...." />
+		
+		<!--
+		<copy file="${sbs.common.home}/src/xml/common.xsd" todir="${sbs.legacy.home}/bondladder/src/wsdl"/>
+		<copy file="${sbs.common.home}/src/xml/sbs-common.xsd" todir="${sbs.legacy.home}/bondladder/src/wsdl"/>
+		-->
+		<path id="axis.classpath">
+			<fileset dir="C:/axis2-1.6.3/lib">
+			    <include name="*.jar" />
+			</fileset>
+			<!--
+			<fileset dir="C:/jdk1.8.0_45/">
+			    <include name="**\*.jar" />
+			</fileset>
+			-->		
+		</path>
+	
+		<!-- Server side generation -->
+		<echo message = "XXXX : Autotype output location - ${autotype.output.location} ...." />
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" failonerror="true"  jvm="${was.java}">
+			<classpath refid="axis.classpath"/>
+			<arg value="--server-side"/>
+			<arg value="--generate-all"/>
+			<arg value="--serverside-interface"/>			
+			<arg value="--all-ports"/>
+						
+			<arg value="--service-description"/>
+			<arg value="--over-ride"/>
+			<arg value="--output"/>
+			<arg value="${autotype.output.location}/generated"/>
+			<arg value="--namespace2package"/>
+			<arg value="${nstopkg.property.location}"/>
+	
+			<arg value="--uri" />
+			<arg value="${wsdl.location}" />
+	
+		</java>
+	
+		<echo message = "XXXX : Service Generation complete. Starting Compilation ...." />
+		<javac srcdir="${autotype.output.location}" debug="${debug}"
+					excludes="**/testsuite/**" destdir="${autotype.output.location}"
+					deprecation="${deprecation}">
+			<classpath>
+				<path refid="axis.classpath" />
+			</classpath>
+		</javac>
+		
+		<echo message = "XXXX : ${skip.webservice.jar} ...." />
+		<antcall target="webservice.createJAR" />
+
+	</target>
+	
+
+	<target name="webservice.WSDL2JavaTask.client">
+
+		<echo message = "XXXX : Client Generation Started ...." />
+		
+		<delete failonerror="false" >
+			<fileset dir="${autotype.output.location}" includes="**/*.java"/>
+		</delete>
+	
+		<path id="axis.classpath">
+			<fileset dir="C:\axis2-1.6.3\lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+
+
+		<!-- Client side generation -->
+		<echo message = "XXXX : Creating directory - ${autotype.output.location}/clientWAS/ ...." />
+		<mkdir dir="${autotype.output.location}/clientWAS/"/>				
+		
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" failonerror="true" classpathref="axis.classpath" jvm="${was.java}">
+			<arg value="--service-description"/>
+						
+			<arg value="--over-ride"/>
+			<arg value="--output"/>
+			<arg value="${autotype.output.location}"/>
+			<arg value="--namespace2package"/>
+			<arg value="${nstopkg.property.location}"/>
+	
+			<arg value="--uri" />
+			<arg value="${wsdl.location}" />
+		</java>
+		
+		<javac srcdir="${autotype.output.location}" debug="${debug}" destdir="${autotype.output.location}" deprecation="${deprecation}">
+			<classpath>
+				<path refid="axis.classpath" />
+			</classpath>
+		</javac>
+		
+		<echo message = "XXXX : ${skip.webservice.jar} ...." />
+		<antcall target="webservice.createJAR"/>
+    	
+	</target>
+	
+	<target name="webservice.createJAR" unless="skip.webservice.jar" >
+		<echo message = "XXXX : Creating JAR ${jar.location}/${jar.name} ...." />
+		<jar jarfile="${jar.location}/${jar.name}">
+			<fileset dir="${autotype.output.location}" includes="**/*.class"/>
+		</jar>
+	</target>
+
+	
+</project>
