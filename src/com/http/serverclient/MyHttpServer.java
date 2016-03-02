@@ -27,7 +27,7 @@ public class MyHttpServer {
 				
 				while ((temp = in.readLine()) != null){
 					req.append(temp);
-					//System.out.println(temp);
+					System.out.println(temp);
 				}
 				
 				System.out.println("XXXX Request : " + req.toString());
