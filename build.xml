@@ -3,7 +3,7 @@
 <project name="MyDummyWebProject" default="all" >
 	<property environment="env"/>
 	<target name="all" >
-		<echo message = "XXXX : target all has been called ....3" />
+		<echo message = "XXXX : target all has been called ....4" />
 	</target>
 	
 	
