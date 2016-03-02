@@ -32,8 +32,8 @@ public class MyHttpServer {
 				byte[] bytes = req.toString().getBytes();
 				out.write(bytes);
 				out.flush();
-				//in.close();
-				//out.close();
+				in.close();
+				out.close();
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
