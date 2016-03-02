@@ -3,6 +3,7 @@ package com.http.serverclient;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -23,9 +24,9 @@ public class MyHttpServer {
 				StringBuffer req=new StringBuffer();
 				String temp=".";
 				
-				String response = "HTTP/1.1 200 OK\n\r";
-				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
-				response = response + "1";
+				//String response = "HTTP/1.1 200 OK\n\r";
+				//response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
+				//response = response + "1";
 				//req.append(response);
 				int i=1;
 				
@@ -37,7 +38,7 @@ public class MyHttpServer {
 			          temp = in.readLine();
 			          if(temp!=null){
 						req.append(temp);
-						System.out.println("Ln : " + i++ + " : " + temp);
+						System.out.println(temp);
 			          }
 				 }
 
@@ -53,7 +54,21 @@ public class MyHttpServer {
 				out.close();
 				//serverSocket.close();
 				
-				sendHookup(req.toString());
+				String response = "{"+
+						"\"pusher\":{" +
+							"\"name\":\"digschauhan\" , " + 
+							"\"email\":\"digs.chauhan@gmail.com\"  " +
+						//	"\"username\":\"digschauhan\", \"password\":\"Digs@1234\", \"X-GitHub-Event\":\"push\" ," +
+						//	"\"X-GitHub-Delivery\":\"c093c600-e09f-11e5-83c8-d6a64f9eaeef\"" +
+						 "},"+
+						 "\"repository\":{" +
+						 	"\"name\":\"myworking\" , " +
+						 	"\"url\":\"https://github.com/digschauhan/MyDummyWebProject\"  " +
+						 "}"+
+					"}";
+			System.out.println("JSON : " + response +"\n");
+			sendHookup(response);
+				//sendHookup(req.toString());
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR Starting Server : " + e.getMessage());
@@ -69,24 +84,53 @@ public class MyHttpServer {
 			URL url = new URL("http://localhost:8080/github-webhook/");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
-			con.setDoInput(true);
+			//con.setDoInput(true);
 			con.setRequestMethod("POST");
 			con.setUseCaches(false);
+			
 			//String test = "<name>Hello</name>";
 			byte[] bytes = response.getBytes();
 			con.setRequestProperty("Content-length", String.valueOf(bytes.length));
-			con.setRequestProperty("Content-type", "text/html");
-			OutputStream out = con.getOutputStream();
-			out.write(bytes);
-			out.flush();
-			out.close();
-			/*BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String temp;
-			while ((temp = in.readLine()) != null){
-				System.out.println(temp);
-			}
-			out.close();
-			in.close();*/
+			con.setRequestProperty("Content-type", "application/json");
+			
+			con.setRequestProperty("User-Agent", "GitHub-Hookshot/7a65dd9");
+			con.setRequestProperty("X-GitHub-Event", "push");
+			con.setRequestProperty("X-GitHub-Delivery", "c093c600-e09f-11e5-83c8-d6a64f9eaeef");
+			
+			con.setRequestProperty("username", "digschauhan");
+			con.setRequestProperty("password", "Digs@1234");
+			
+			//OutputStream out = con.getOutputStream();
+			
+			OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
+			writer.write(response);
+			//out.write(bytes);
+			//out.flush();
+			//out.close();
+			writer.flush();
+			writer.close();
+			
+			
+			
+			int responseCode = con.getResponseCode();
+	        System.out.println("POST Response Code :: " + responseCode);
+	 
+	        if (responseCode == HttpURLConnection.HTTP_OK) { //success
+	            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+	            String inputLine;
+	            StringBuffer res = new StringBuffer();
+	 
+	            while ((inputLine = in.readLine()) != null) {
+	                res.append(inputLine);
+	            }
+	            in.close();
+	 
+	            // print result
+	            System.out.println(response.toString());
+	        } else {
+	            System.out.println("POST request not worked");
+	        }			
+			
 			con.disconnect();
 			System.out.println("XXXXX Sent request to Jenkins ...");
 			
