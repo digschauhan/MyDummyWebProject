@@ -35,8 +35,10 @@ public class MyHttpServer {
 				}*/
 				 while (temp != null && !temp.equals("")){
 			          temp = in.readLine();
+			          if(temp!=null){
 						req.append(temp);
 						System.out.println("Ln : " + i++ + " : " + temp);
+			          }
 				 }
 
 				 
