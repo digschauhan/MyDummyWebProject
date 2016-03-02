@@ -18,17 +18,25 @@ public class MyHttpServer {
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				OutputStream out = clientSocket.getOutputStream();
 				StringBuffer req=new StringBuffer();
-				String temp;
+				String temp=".";
 				
 				String response = "HTTP/1.1 200 OK\n\r";
 				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
 				response = response + "1";
 				req.append(response);
 				int i=1;
-				while ((temp = in.readLine()) != null){
+				
+				/*while ((temp = in.readLine()) != null){
 					req.append(temp);
 					System.out.println("Ln : " + i++ + " : " + temp);
-				}
+				}*/
+				 while (!temp.equals("")){
+			          temp = in.readLine();
+						req.append(temp);
+						System.out.println("Ln : " + i++ + " : " + temp);
+				 }
+
+				 
 				System.out.println("XXXXXX out of the loop ......");
 				
 				System.out.println("XXXX Request : " + req.toString());
