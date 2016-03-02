@@ -64,6 +64,8 @@ public class MyHttpServer {
 	
 	public void sendHookup(String response){
 		try {
+			System.out.println("XXXXX Sending POST request to Jenkins ...");
+			
 			URL url = new URL("http://localhost:8080/github-webhook/");
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setDoOutput(true);
@@ -86,6 +88,8 @@ public class MyHttpServer {
 			out.close();
 			in.close();*/
 			con.disconnect();
+			System.out.println("XXXXX Sent request to Jenkins ...");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
