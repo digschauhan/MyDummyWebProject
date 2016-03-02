@@ -23,7 +23,8 @@ public class MyHttpServer {
 					req.append(temp);
 					//System.out.println(temp);
 				}
-				System.out.println(req.toString());
+				
+				System.out.println("Request : " + req.toString());
 				
 				String response = "HTTP/1.1 200 OK\n\r";
 				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
