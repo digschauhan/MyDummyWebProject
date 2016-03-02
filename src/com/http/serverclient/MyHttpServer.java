@@ -19,16 +19,19 @@ public class MyHttpServer {
 				OutputStream out = clientSocket.getOutputStream();
 				StringBuffer req=new StringBuffer();
 				String temp;
+				
+				String response = "HTTP/1.1 200 OK\n\r";
+				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
+				response = response + "1";
+				req.append(response);
+				
 				while ((temp = in.readLine()) != null){
 					req.append(temp);
 					//System.out.println(temp);
 				}
 				
-				System.out.println("Request : " + req.toString());
+				System.out.println("XXXX Request : " + req.toString());
 				
-				String response = "HTTP/1.1 200 OK\n\r";
-				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
-				response = response + "1";
 				byte[] bytes = req.toString().getBytes();
 				out.write(bytes);
 				out.flush();
