@@ -34,6 +34,7 @@ public class MyHttpServer {
 				out.flush();
 				in.close();
 				out.close();
+				
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR: " + e.getMessage());
