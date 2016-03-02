@@ -51,13 +51,13 @@ public class MyHttpServer {
 				out.flush();
 				in.close();
 				out.close();
-				serverSocket.close();
+				//serverSocket.close();
 				
 				sendHookup(req.toString());
 			}
 		} catch (Exception e) {
-			System.out.println("ERROR: " + e.getMessage());
-			System.exit(1);
+			System.out.println("ERROR Starting Server : " + e.getMessage());
+			
 		}
 		
 	}
@@ -88,7 +88,7 @@ public class MyHttpServer {
 			con.disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(1);
+			
 		}
 	}
 
