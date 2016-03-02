@@ -29,6 +29,7 @@ public class MyHttpServer {
 					req.append(temp);
 					System.out.println("Ln : " + i++ + " : " + temp);
 				}
+				System.out.println("XXXXXX out of the loop ......");
 				
 				System.out.println("XXXX Request : " + req.toString());
 				
