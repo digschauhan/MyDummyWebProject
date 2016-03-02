@@ -24,10 +24,10 @@ public class MyHttpServer {
 				response = response + "Date: Fri, 04 May 2001 20:08:11 GMT\n\r";
 				response = response + "1";
 				req.append(response);
-				
+				int i=1;
 				while ((temp = in.readLine()) != null){
 					req.append(temp);
-					System.out.println(temp);
+					System.out.println("Ln : " + i + " : " + temp);
 				}
 				
 				System.out.println("XXXX Request : " + req.toString());
